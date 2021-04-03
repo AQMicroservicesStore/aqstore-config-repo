@@ -1,0 +1,340 @@
+openapi: "3.0.2"
+info:
+  title: aqstore-stock-service
+  version: 1.0.0
+  contact:
+    name: API SUPPORT
+    email: apisupport@example.com
+  license:
+    name: MIT License
+    url: https://mit-license.org/
+servers:
+  - url: https://localhost:8050/stock/api/v1
+
+
+components:
+  parameters:
+    query_limit:
+      name: limit
+      in: query
+      required: false
+      description: The  size of items to return
+      schema:
+        $ref: '#/components/schemas/limitPerPage'
+    query_page:
+      name: page
+      in: query
+      required: false
+      description: Number of the page to return
+      schema:
+        $ref: '#/components/schemas/page'
+    path_uuid:
+      name: id
+      in: path
+      required: true
+      description: the uuid identify of the resource to retrieve
+      schema:
+        $ref: '#/components/schemas/uuid'
+        
+  responses:
+    NotFound:
+      description: The specified resource was not found
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorDTO'
+    Unauthorized:
+      description: Unauthorized
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorDTO'
+    BadRequest:
+      description: Bad Request
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorDTO'
+    GenericError:
+      description: Generic Error
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorDTO'
+  
+  
+  schemas:
+    int16Signed:
+      type: integer
+      format: int16
+      minimum: 0
+      maximum: 32767
+    int32Signed:
+      type: integer
+      format: int32
+      minimum: 0
+      maximum: 2147483647      
+    int64Signed:
+      type: integer
+      format: int64
+      minimum: 0
+      maximum: 9223372036854775807
+    limitPerPage:
+      description: the limit of the items to return
+      type: integer
+      format: int16
+      minimum: 1
+      maximum: 50
+      default: 25
+    page:
+       type: integer
+       format: int16
+       minimum: 1
+       maximum: 32767
+       default: 1  
+    uuid:
+      description: Unique Id of the product
+      readOnly: true
+      type: string
+      pattern: '^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$'
+      # the regex above limits the length;
+      # however, some tools might require explicit settings:
+      minLength: 36
+      maxLength: 36
+    safetextName:
+      description: Safe text for Name
+      type: string
+      pattern: '^[a-zA-Z0-9 .-]+$'
+      minLength: 3
+      maxLength: 50
+    safetextMessages:
+      description: Safe text for Name
+      type: string
+      pattern: '^[a-zA-Z0-9 .-]+$'
+      minLength: 3
+      maxLength: 100
+    ErrorDTO:
+      type: object
+      additionalProperties: false
+      description: Error Details
+      properties:
+        errorCode:
+          type: string
+          pattern: '^[0-9]{4}$'
+          minLength: 4
+          maxLength: 4
+        errorMessage:
+          $ref: '#/components/schemas/safetextMessages'
+        datetime:
+          type: string
+          format: date-time
+          maxLength: 24
+      required:
+        - errorCode
+        - errorMessage
+        - datetime
+      example:
+        code: 1010
+        message: Products not found
+    ProductType:
+      type: string
+      description: Type of a book
+      enum:
+        - MULTIMEDIA
+        - GAMING
+        - DOMOTIC
+        - MUSIC
+        - OTHERS
+      example: GAMING
+    BrandDTO:
+      type: object
+      additionalProperties: false
+      description: the Brand of the Product
+      properties:
+        brandName:
+          $ref: '#/components/schemas/safetextName'
+        brandCode:
+          description: Code of the brand
+          type: string
+          pattern: '^[0-9a-f]{5}$'
+          minLength: 5
+          maxLength: 5
+      required:
+        - brandName
+        - brandCode
+      example:
+        brandName: Microsoft
+        brandCode: MCS01
+    ProductDTO:
+      type: object
+      additionalProperties: false
+      description: Product's info
+      properties:
+        id:
+          $ref: '#/components/schemas/uuid'
+        productName:
+          $ref: '#/components/schemas/safetextName'
+        itemsAvailable:
+          $ref: '#/components/schemas/int16Signed'
+        productType:
+          $ref: '#/components/schemas/ProductType'
+        brand:
+          $ref: '#/components/schemas/BrandDTO'
+      required:
+        - id
+        - productName
+        - itemsAvailable
+        - productType
+        - brand
+      example:
+        id: 60a37ac1-c7b2-4b32-8557-d8aba5bd747d
+        productName: Playstation 5 Digital
+        itemsAvailable: 0
+        productType: GAMING
+        brand:
+          brandName: SONY
+          brandCode: SN010
+    ProductListDTO:
+      type: object
+      additionalProperties: false
+      description: List of products
+      properties:
+        totalItems:
+          $ref: '#/components/schemas/int64Signed'
+        itemsPerPage:
+          $ref: '#/components/schemas/limitPerPage'
+        allPage:
+          $ref: '#/components/schemas/int64Signed'
+        currentPage:
+          $ref: '#/components/schemas/int64Signed'
+        nextPage:
+          $ref: '#/components/schemas/int64Signed'
+        products:
+          type: array
+          items:
+            $ref: '#/components/schemas/ProductDTO'
+
+        
+          
+
+
+
+paths:
+  /products:
+    get:
+      summary: List all products
+      operationId: listproducts
+      tags:
+        - Product
+      parameters:
+        - $ref: '#/components/parameters/query_limit'
+        - $ref: '#/components/parameters/query_page'
+      responses:
+        200:
+          description: "A list of products"
+          content:
+            application/json:
+              schema:
+               $ref: "#/components/schemas/ProductListDTO"
+        400:
+          $ref: '#/components/responses/BadRequest'
+        401:
+          $ref: '#/components/responses/Unauthorized'
+        404:
+          $ref: '#/components/responses/NotFound'
+        5XX:
+          $ref: '#/components/responses/GenericError'
+    post:
+      summary: Add New Product
+      operationId: addProduct
+      tags:
+        - Product
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ProductDTO'
+        required: true
+        x-codegen-request-body-name: body
+      responses:
+        201:
+          description: A created Product
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ProductDTO"
+        400:
+          $ref: '#/components/responses/BadRequest'
+        401:
+          $ref: '#/components/responses/Unauthorized'
+        404:
+          $ref: '#/components/responses/NotFound'
+        5XX:
+          $ref: '#/components/responses/GenericError'
+  /products/{productId}:
+    put:
+      operationId: updateProduct
+      summary: updates the available quantities of a product
+      parameters:
+        - $ref: '#/components/parameters/path_uuid'
+        - name: quantityToUpdate
+          in: query
+          required: true
+          description: the size to add or remove from quantity availables
+          schema:
+            $ref: '#/components/schemas/int16Signed'
+        - name: action
+          in: query
+          required: false
+          description: the operation to be carried out in the update
+          schema:
+            type: string
+            enum:
+              - ADD
+              - REMOVE
+
+      responses:
+        200:
+          description: Response if valid operation
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ProductDTO"
+        400:
+          $ref: '#/components/responses/BadRequest'
+        401:
+          $ref: '#/components/responses/Unauthorized'
+        404:
+          $ref: '#/components/responses/NotFound'
+        5XX:
+          $ref: '#/components/responses/GenericError'
+    get:
+      summary: Specified product details
+      operationId: show Product by Id
+      tags:
+        - Product
+      parameters:
+        - name: productId
+          in: path
+          required: true
+          description: the identify of product to retrieve
+          schema:
+            $ref: '#/components/schemas/uuid'
+
+      responses:
+        200:
+          description: Response if valid identify
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ProductDTO"
+        400:
+          $ref: '#/components/responses/BadRequest'
+        401:
+          $ref: '#/components/responses/Unauthorized'
+        404:
+          $ref: '#/components/responses/NotFound'
+        5XX:
+          $ref: '#/components/responses/GenericError'
+
+
