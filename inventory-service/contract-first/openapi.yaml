@@ -242,7 +242,7 @@ paths:
           $ref: '#/components/responses/Unauthorized'
         404:
           $ref: '#/components/responses/NotFound'
-        5XX:
+        500:
           $ref: '#/components/responses/GenericError'
     post:
       summary: Add New Product
@@ -269,7 +269,7 @@ paths:
           $ref: '#/components/responses/Unauthorized'
         404:
           $ref: '#/components/responses/NotFound'
-        5XX:
+        500:
           $ref: '#/components/responses/GenericError'
   /products/{productId}:
     put:
@@ -306,7 +306,7 @@ paths:
           $ref: '#/components/responses/Unauthorized'
         404:
           $ref: '#/components/responses/NotFound'
-        5XX:
+        500:
           $ref: '#/components/responses/GenericError'
     get:
       summary: Specified product details
@@ -334,7 +334,7 @@ paths:
           $ref: '#/components/responses/Unauthorized'
         404:
           $ref: '#/components/responses/NotFound'
-        5XX:
+        500:
           $ref: '#/components/responses/GenericError'
 
 
