@@ -42,25 +42,25 @@ components:
       content:
         application/json:
           schema:
-            $ref: '#/components/schemas/ErrorDTO'
+            $ref: '#/components/schemas/Error'
     Unauthorized:
       description: Unauthorized
       content:
         application/json:
           schema:
-            $ref: '#/components/schemas/ErrorDTO'
+            $ref: '#/components/schemas/Error'
     BadRequest:
       description: Bad Request
       content:
         application/json:
           schema:
-            $ref: '#/components/schemas/ErrorDTO'
+            $ref: '#/components/schemas/Error'
     GenericError:
       description: Generic Error
       content:
         application/json:
           schema:
-            $ref: '#/components/schemas/ErrorDTO'
+            $ref: '#/components/schemas/Error'
   
   
   schemas:
@@ -86,6 +86,12 @@ components:
       minimum: 1
       maximum: 50
       default: 25
+    floatPrice:
+      description: price in float
+      type: number
+      format: float
+      minimum: 0
+      maximum: 1000
     page:
        type: integer
        format: int16
@@ -113,7 +119,7 @@ components:
       pattern: '^[a-zA-Z0-9 .-]+$'
       minLength: 3
       maxLength: 100
-    ErrorDTO:
+    Error:
       type: object
       additionalProperties: false
       description: Error Details
@@ -146,7 +152,7 @@ components:
         - MUSIC
         - OTHERS
       example: GAMING
-    BrandDTO:
+    Brand:
       type: object
       additionalProperties: false
       description: the Brand of the Product
@@ -165,7 +171,7 @@ components:
       example:
         brandName: Microsoft
         brandCode: MCS01
-    ProductDTO:
+    Product:
       type: object
       additionalProperties: false
       description: Product's info
@@ -176,14 +182,17 @@ components:
           $ref: '#/components/schemas/safetextName'
         itemsAvailable:
           $ref: '#/components/schemas/int16Signed'
+        price:
+          $ref: '#/components/schemas/floatPrice'
         productType:
           $ref: '#/components/schemas/ProductType'
         brand:
-          $ref: '#/components/schemas/BrandDTO'
+          $ref: '#/components/schemas/Brand'
       required:
         - id
         - productName
         - itemsAvailable
+        - price
         - productType
         - brand
       example:
@@ -194,7 +203,7 @@ components:
         brand:
           brandName: SONY
           brandCode: SN010
-    ProductListDTO:
+    ProductList:
       type: object
       additionalProperties: false
       description: List of products
@@ -212,7 +221,7 @@ components:
         products:
           type: array
           items:
-            $ref: '#/components/schemas/ProductDTO'
+            $ref: '#/components/schemas/Product'
 
         
           
@@ -235,7 +244,7 @@ paths:
           content:
             application/json:
               schema:
-               $ref: "#/components/schemas/ProductListDTO"
+               $ref: "#/components/schemas/ProductList"
         400:
           $ref: '#/components/responses/BadRequest'
         401:
@@ -253,7 +262,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/ProductDTO'
+              $ref: '#/components/schemas/Product'
         required: true
         x-codegen-request-body-name: body
       responses:
@@ -262,7 +271,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/ProductDTO"
+                $ref: "#/components/schemas/Product"
         400:
           $ref: '#/components/responses/BadRequest'
         401:
@@ -299,7 +308,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/ProductDTO"
+                $ref: "#/components/schemas/Product"
         400:
           $ref: '#/components/responses/BadRequest'
         401:
@@ -327,7 +336,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/ProductDTO"
+                $ref: "#/components/schemas/Product"
         400:
           $ref: '#/components/responses/BadRequest'
         401:
