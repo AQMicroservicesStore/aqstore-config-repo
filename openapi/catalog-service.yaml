@@ -133,7 +133,7 @@ components:
           type: string
           format: date-time
           maxLength: 24
-          default: 2020-08-24 18:00:23.000
+          example: "2021-01-30T08:30:00Z"
       required:
         - errorCode
         - errorMessage

@@ -105,8 +105,7 @@ components:
         datetime:
           type: string
           format: date-time
-          maxLength: 24
-          default: iso-date-time
+          example: "2021-01-30T08:30:00Z"
       required:
         - errorCode
         - errorMessage
