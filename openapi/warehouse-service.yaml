@@ -218,7 +218,7 @@ paths:
         - name: stockId
           in: path
           required: true
-          description: the identify of product to retrieve
+          description: the identify of product to uodate
           schema:
             $ref: '#/components/schemas/id_int64Unsigned'
       requestBody:
@@ -270,7 +270,48 @@ paths:
           $ref: '#/components/responses/NotFound'
         500:
           $ref: '#/components/responses/GenericError'    
-  
+  /stock/quantity/{stockId}:
+    put:
+      operationId: updateItemQuantity
+      summary: updates the available quantities of an item
+      parameters:
+        - name: stockId
+          in: path
+          required: true
+          description: the identify of the item to update
+          schema:
+            $ref: '#/components/schemas/id_int64Unsigned'
+        - name: quantityToUpdate
+          in: query
+          required: true
+          description: the size to add or remove from quantity availables
+          schema:
+            $ref: '#/components/schemas/int16Signed'
+        - name: action
+          in: query
+          required: false
+          description: the operation to be carried out in the update
+          schema:
+            type: string
+            enum:
+              - ADD
+              - REMOVE
 
+      responses:
+        200:
+          description: Response if valid operation
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Product"
+        400:
+          $ref: '#/components/responses/BadRequest'
+        401:
+          $ref: '#/components/responses/Unauthorized'
+        404:
+          $ref: '#/components/responses/NotFound'
+        500:
+          $ref: '#/components/responses/GenericError'
+    
 
 
