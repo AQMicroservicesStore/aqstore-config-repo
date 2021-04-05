@@ -286,7 +286,7 @@ paths:
           required: true
           description: the size to add or remove from quantity availables
           schema:
-            $ref: '#/components/schemas/int16Signed'
+            $ref: '#/components/schemas/int16Unsigned'
         - name: action
           in: query
           required: false
@@ -303,7 +303,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Product"
+                $ref: "#/components/schemas/StockItem"
         400:
           $ref: '#/components/responses/BadRequest'
         401:
