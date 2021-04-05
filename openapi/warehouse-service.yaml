@@ -274,6 +274,8 @@ paths:
     put:
       operationId: updateItemQuantity
       summary: updates the available quantities of an item
+      tags:
+        - Stock
       parameters:
         - name: stockId
           in: path
@@ -313,5 +315,4 @@ paths:
         500:
           $ref: '#/components/responses/GenericError'
     
-
 
