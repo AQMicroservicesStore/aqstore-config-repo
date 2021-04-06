@@ -93,7 +93,7 @@ components:
       format: float
       minimum: 0
       maximum: 1000
-    intWeigth:
+    intWeight:
       description: weigth size
       type: integer
       format: int16
@@ -167,8 +167,8 @@ components:
           $ref: '#/components/schemas/safetextName'
         brand:
           $ref: '#/components/schemas/safetextName'
-        weigth:
-          $ref: '#/components/schemas/intWeigth'
+        weight:
+          $ref: '#/components/schemas/intWeight'
         quantitySold:
           $ref: '#/components/schemas/int64Unsigned'
 
@@ -178,7 +178,7 @@ components:
         - price
         - productType
         - brand
-        - weigth
+        - weight
         - quantitySold
       example:
         id: 1
@@ -186,7 +186,7 @@ components:
         price: 499
         availability: NOT_AVAILABLE
         productType: GAMING
-        weigth: 10
+        weight: 10
         brand: Microsoft
 
     ProductList:
