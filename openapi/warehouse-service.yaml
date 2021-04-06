@@ -75,7 +75,7 @@ components:
       minLength: 3
       maxLength: 50
     safetextMessages:
-      description: Safe text for Name
+      description: Safe text for Description
       type: string
       pattern: '^[a-zA-Z0-9 .-]+$'
       minLength: 3
@@ -130,6 +130,8 @@ components:
           $ref: '#/components/schemas/safetextName'
         weigth:
           $ref: '#/components/schemas/intWeigth'
+        stock:
+          $ref: '#/components/schemas/Stock'
       required:
         - productName
         - productType
@@ -142,6 +144,10 @@ components:
         productType: GAMING
         weigth: 10
         brand: Sony
+        stock:
+          quantity: 0
+          purchaseCost: 0
+          priceToSell: 0
     Stock:
       type: object
       additionalProperties: false
