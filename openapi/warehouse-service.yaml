@@ -62,8 +62,8 @@ components:
       format: float
       minimum: 0
       maximum: 1000
-    intWeigth:
-      description: weigth size
+    intWeight:
+      description: weight size
       type: integer
       format: int16
       minimum: 1
@@ -128,21 +128,21 @@ components:
           $ref: '#/components/schemas/ProductType'
         brand:
           $ref: '#/components/schemas/safetextName'
-        weigth:
-          $ref: '#/components/schemas/intWeigth'
+        weight:
+          $ref: '#/components/schemas/intWeight'
         stock:
           $ref: '#/components/schemas/Stock'
       required:
         - productName
         - productType
         - brand
-        - weigth
+        - weight
       example:
         id: 1
         productName: Playstation 5 Digital
         productDescription: Console di nuova generazione 
         productType: GAMING
-        weigth: 10
+        weight: 10
         brand: Sony
         stock:
           quantity: 0

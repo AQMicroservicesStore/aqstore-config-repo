@@ -94,7 +94,7 @@ components:
       minimum: 0
       maximum: 1000
     intWeight:
-      description: weigth size
+      description: weight size
       type: integer
       format: int16
       minimum: 1
